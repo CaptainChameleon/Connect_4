@@ -217,17 +217,21 @@ def h7(state):
         elif x == 3 or x == 5:
             h -= 10
 
-        if y == 1 or (x, y - 1) in state.board:
-            cv = chips_in_row((x, y + 1), state.board, "O", (0, 1))
+        if y == 1 or (x, y -1) in state.board:
+            #cv = chips_in_row((x, y + 1), state.board, "O", (0, 1))
             ch = chips_in_row((x, y + 1), state.board, "O", (1, 0))
             cds = chips_in_row((x, y + 1), state.board, "O", (1, -1))
             cdi = chips_in_row((x, y + 1), state.board, "O", (1, 1))
-            h += ((80 * utils.if_(cv == 3, cv, 0)) - (y * 2)) \
-                 + (100 * utils.if_(ch == 3, ch, 0)) \
+            h += 1.25 * ((100 * utils.if_(ch == 3, ch, 0)) \
                  + (((90 * utils.if_(cds == 3, cds, 0)) + (y * 2)) * utils.if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1)) \
-                 + (((90 * utils.if_(cdi == 3, cdi, 0)) + (y * 2)) * utils.if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1))
-
-
+                 + (((90 * utils.if_(cdi == 3, cdi, 0)) + (y * 2)) * utils.if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1)))
+                 #+ (70 * utils.if_(cv == 3, cv, 0))
+            ch = chips_in_row((x, y + 1), state.board, "X", (1, 0))
+            cds = chips_in_row((x, y + 1), state.board, "X", (1, -1))
+            cdi = chips_in_row((x, y + 1), state.board, "X", (1, 1))
+            h -= (100 * utils.if_(ch == 3, ch, 0)) \
+                + (((90 * utils.if_(cds == 3, cds, 0)) + (y * 2)) * utils.if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1)) \
+                + (((90 * utils.if_(cdi == 3, cdi, 0)) + (y * 2)) * utils.if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1))
     return h
 
 def chips_in_row((a, b), board, player, (delta_x, delta_y)):
