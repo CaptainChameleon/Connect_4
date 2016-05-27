@@ -28,7 +28,7 @@ class Human(Player):
 class Computer(Player):
     def __init__(self, chip, heuristic=1):
         Player.__init__(self, chip)
-        strategies = (heuristicas.h0, heuristicas.h1, heuristicas.h4, heuristicas.h7, heuristicas.custom)
+        strategies = (heuristicas.h0, heuristicas.h1, heuristicas.h6, heuristicas.h7, heuristicas.custom)
         self.heuristic = strategies[heuristic]
 
     def move(self, game, state):
