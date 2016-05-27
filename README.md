@@ -1,11 +1,17 @@
 # Connect_4
 
+-----------------------
+Autores:              |
+Ignacio Alfonso Brito |
+Gabriel García Buey   |
+-----------------------
+
 Connect 4 basa su funcionamiento principalmente en los tres archivos games.py, heuristicas.py y run.py. El fichero game es donde se encuentran implementados los algoritmos de búsuqeda así como las clases Game, Tictactoe (tres en raya) y ConnectFour que repesentan los juegos que responden a tales nombres (salvo Game que es una clase abstracta más general). El fichero games.py fue aportado por nuestro profesor y nosotros apenas lo hemos modificado. Simplemente hemos añadido esta porción de código a la función alphabeta_search para que cuando el algoritmo de búsqueda pueda seleccionar un estado ganador lo seleccione:
 
 for (x, y) in lista:
         if game.utility(y, player) > 0:
-            return x
-            
+                return x
+
 También modificamos la invocación a las heurísticas para que cumpliese con los parámetros que exigen: state y player. El state lo necesitan para poder valorar el estado y el parámetro player lo necesitan para saber qué fichas son las suyas y que las heurísticas se adapten dinámicamente a cualquier configuración de juego sin tener que estar modificando el código.
 
 En cuanto a las heurísticas se puede observar que, cuando se introduce una IA en el juego, se pueden seleccionar 5 dificultades, que corresponden a una heurística distinta cada uno. La última (custom) corresponde a cualquier otra heurística externa que se quiera probar en nuestro Connect 4; para probarla simplemente tiene que pegar el código de la heurística dentro de la función custom en el fichero heuristicas.py. Las otras dificultades corresponden a heurísticas implementadas por nosotros: 
