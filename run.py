@@ -28,7 +28,7 @@ class Human(Player):
 class Computer(Player):
     def __init__(self, chip, heuristic=1):
         Player.__init__(self, chip)
-        strategies = (heuristicas.h0, heuristicas.h1, heuristicas.h6, heuristicas.h7, heuristicas.custom)
+        strategies = (heuristicas.h0, heuristicas.h1, heuristicas.h4, heuristicas.h7, heuristicas.custom)
         self.heuristic = strategies[heuristic]
 
     def move(self, game, state):
@@ -59,10 +59,10 @@ def play(initialPlayer, player1, player2):
         print "\n-------------------"
         if game.terminal_test(state):
             game.display(state)
-            print "\r\n                            Final de la partida" \
-                "\r\n                                 Winner:", \
-                if_(state.utility,
-                    if_(player == 'O', 'X', 'O'), if_(not state.moves, '-', if_(player == 'O', 'X', 'O')))
+            print "\r\n                                 GAME OVER" \
+                  "\r\n                                 Winner:", \
+                  if_(state.utility, if_(player == 'O', 'X', 'O'),
+                      if_(not state.moves, '-', if_(player == 'O', 'X', 'O'))) + "\r\n"
             break
 
 def human_vs_computer():
@@ -87,7 +87,7 @@ def human_vs_computer():
         print("Please enter 'X' or 'O'")
     difficulty = 1
     while True:
-        print("1. Regalado\r\n2. Easy\r\n3. Medium\r\n4. I don't want to win (and you won't)\r\n5. Custom")
+        print("1. Regalado\r\n2. Easy\r\n3. Medium\r\n4. I don't want to win [And you won't]\r\n5. Custom")
         try:
             difficulty = int(raw_input("Select AI difficulty: "))
             if difficulty > 0 and difficulty < 6: break
@@ -185,7 +185,7 @@ def human_vs_human():
 while True:
     operations = (human_vs_computer, computer_vs_computer, human_vs_human)
     option = 5
-    print "                            CONNECT - 4\r\n                            FSI EDITION" \
+    print "                                CONNECT - 4\r\n                                FSI EDITION" \
           "\r\n1. Human VS Computer\r\n2. Computer VS Computer\r\n3. Human VS Human\r\n4. Exit"
     while True:
         try:
@@ -194,5 +194,5 @@ while True:
             print("Invalid mode!")
         except ValueError:
             print("Please introduce a number! [1-4]")
-    if (option - 1) == 3: break
+    if (option) == 4: break
     operations[option - 1]()

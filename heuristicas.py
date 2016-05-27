@@ -2,24 +2,27 @@ __author__ = "Ignacio Alfonso Brito && Gabriel Garcia Buey"
 from utils import if_
 from random import randint
 
-
-def __init__(self, player):
-    self.player = player
+def memoize(heuristic):
+    memo = {}
+    def helper(state, player):
+        inmmutable_state = (state.to_move, frozenset(state.board.items()))
+        if inmmutable_state not in memo:
+            memo[inmmutable_state] = heuristic(state, player)
+        return memo[inmmutable_state]
+    return helper
 
 # stochastic heuristic
-
 def h0(state, player):
     return randint(-100,100)
 
 # brutal sadic stochastic heuristic
-
 def h1(state, player):
     if state.utility:
         return state.utility * if_(player == 'X', 10000, -10000)
     return randint(-100,100)
 
 #MaqIAvel-4
-
+@memoize
 def h2(state, player):
     if state.utility:
         return state.utility * if_(player == 'X', 10000, -10000)
@@ -45,14 +48,14 @@ def h2(state, player):
                 ch = chips_in_row((x, y), state.board, if_(player == 'X', 'O', 'X'), (1, 0))
                 cds = chips_in_row((x, y), state.board, if_(player == 'X', 'O', 'X'), (1, -1))
                 cdi = chips_in_row((x, y), state.board, if_(player == 'X', 'O', 'X'), (1, 1))
-                h -= 1.5 * (((100 * if_(cv > 1, cv, 0)) - (y * 2)) \
-                     + (95 * if_(ch > 1, ch, 0)) \
-                     + (((90 * if_(cds > 1, cds, 0)) + (y * 2)) * if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1)) \
+                h -= 1.5 * (((100 * if_(cv > 1, cv, 0)) - (y * 2))
+                     + (95 * if_(ch > 1, ch, 0))
+                     + (((90 * if_(cds > 1, cds, 0)) + (y * 2)) * if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1)) 
                      + (((90 * if_(cdi > 1, cdi, 0)) + (y * 2)) * if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1)))
     return h
 
 # Nacho's DESTRUCTOR
-
+@memoize
 def h3(state, player):
     if state.utility:
         return state.utility * if_(player == 'X', 10000, -10000)
@@ -68,7 +71,7 @@ def h3(state, player):
                     h += 80
     return h
 
-
+@memoize
 def h4(state, player):
     if state.utility:
         return state.utility * if_(player == 'X', 10000, -10000)
@@ -98,7 +101,7 @@ def h4(state, player):
 
     return h
 
-
+@memoize
 def h5(state, player):
     if state.utility:
         return state.utility * if_(player == 'X', 10000, -10000)
@@ -132,8 +135,9 @@ def h5(state, player):
                      + (((95 * if_(cdi > 1, cdi, 0)) + (y * 2)) * if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1))
 
     return h
-#Nacho's Reaper 'Wall of death'
 
+#Nacho's Reaper 'Wall of death'
+@memoize
 def h6(state, player):
     he = 1000
     if state.utility:
@@ -215,7 +219,7 @@ def h6(state, player):
     return he
 
 #Tricker
-
+@memoize
 def h7(state, player):
     if state.utility:
         return state.utility * if_(player == 'X', 10000, -10000)
@@ -230,25 +234,29 @@ def h7(state, player):
             ch = chips_in_row((x, y + 1), state.board, player, (1, 0))
             cds = chips_in_row((x, y + 1), state.board, player, (1, -1))
             cdi = chips_in_row((x, y + 1), state.board, player, (1, 1))
-            h += 1.25 * ((100 * if_(ch == 3, ch, 0)) \
-                         + (((90 * if_(cds == 3, cds, 0)) + (y * 2)) \
-                            * if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1)) \
-                         + (((90 * if_(cdi == 3, cdi, 0)) + (y * 2)) \
+            h += 1.15 * ((100 * if_(ch == 3, ch, 0))
+                         + (((90 * if_(cds == 3, cds, 0)) + (y * 2))
+                            * if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1))
+                         + (((90 * if_(cdi == 3, cdi, 0)) + (y * 2))
                             * if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1)))
 
             ch = chips_in_row((x, y + 1), state.board, if_(player == 'X', 'O', 'X'), (1, 0))
             cds = chips_in_row((x, y + 1), state.board, if_(player == 'X', 'O', 'X'), (1, -1))
             cdi = chips_in_row((x, y + 1), state.board, if_(player == 'X', 'O', 'X'), (1, 1))
             h -= 100 * if_(ch == 3, ch, 0) + \
-                 (((90 * if_(cds == 3, cds, 0)) + (y * 2)) \
+                 (((90 * if_(cds == 3, cds, 0)) + (y * 2))
                     * if_((x >= 5 & y in range(11 - x, 7)) or (x <= 3 & y in range(1, 5 - x)), 0, 1)) \
-                + (((90 * if_(cdi == 3, cdi, 0)) + (y * 2)) \
+                + (((90 * if_(cdi == 3, cdi, 0)) + (y * 2))
                     * if_((x <= 3 & y in range(11 - x, 7)) or (x >= 5 & y in range(1, 5 - x)), 0, 1))
     return h
 
-
+@memoize
 def custom(state, player):
+    if state.utility:
+        return state.utility * if_(player == 'X', 10000, -10000)
+
     # External heuristic code goes here
+
     print("bleh")
     return 0
 
