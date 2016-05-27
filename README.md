@@ -1,10 +1,6 @@
 # Connect_4
 
------------------------
-Autores:              |
-Ignacio Alfonso Brito |
-Gabriel García Buey   |
------------------------
+Autores:                                                                                                                 Ignacio Alfonso Brito                                                                                                    Gabriel García Buey
 
 Connect 4 basa su funcionamiento principalmente en los tres archivos games.py, heuristicas.py y run.py. El fichero game es donde se encuentran implementados los algoritmos de búsuqeda así como las clases Game, Tictactoe (tres en raya) y ConnectFour que repesentan los juegos que responden a tales nombres (salvo Game que es una clase abstracta más general). El fichero games.py fue aportado por nuestro profesor y nosotros apenas lo hemos modificado. Simplemente hemos añadido esta porción de código a la función alphabeta_search para que cuando el algoritmo de búsqueda pueda seleccionar un estado ganador lo seleccione:
 
